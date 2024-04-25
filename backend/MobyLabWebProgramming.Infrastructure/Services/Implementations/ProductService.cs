@@ -42,9 +42,9 @@ public class ProductService : IProductService
 
     public async Task<ServiceResponse> AddProduct(ProductAddDto product, UserDTO? requestingUser, CancellationToken cancellationToken = default)
     {
-        if (requestingUser != null && requestingUser.Role != UserRoleEnum.Admin)
+        if (requestingUser != null && (requestingUser.Role != UserRoleEnum.Admin || requestingUser.Role != UserRoleEnum.Personnel))
         {
-            return ServiceResponse.FromError(new(HttpStatusCode.Forbidden, "Only admins can add products!",
+            return ServiceResponse.FromError(new(HttpStatusCode.Forbidden, "Only admins/personnel can add products!",
                 ErrorCodes.CannotAdd));
         }
 
@@ -69,9 +69,9 @@ public class ProductService : IProductService
 
     public async Task<ServiceResponse> UpdateProduct(ProductUpdateDto product, UserDTO? requestingUser, CancellationToken cancellationToken = default)
     {
-        if (requestingUser != null && requestingUser.Role != UserRoleEnum.Admin)
+        if (requestingUser != null && (requestingUser.Role != UserRoleEnum.Admin || requestingUser.Role != UserRoleEnum.Personnel))
         {
-            return ServiceResponse.FromError(new(HttpStatusCode.Forbidden, "Only admins can update products!",
+            return ServiceResponse.FromError(new(HttpStatusCode.Forbidden, "Only admins/personnel can update products!",
                 ErrorCodes.CannotUpdate));
         }
 
@@ -92,9 +92,9 @@ public class ProductService : IProductService
 
     public async Task<ServiceResponse> DeleteProduct(Guid id, UserDTO? requestingUser, CancellationToken cancellationToken = default)
     {
-        if (requestingUser != null && requestingUser.Role != UserRoleEnum.Admin)
+        if (requestingUser != null && (requestingUser.Role != UserRoleEnum.Admin || requestingUser.Role != UserRoleEnum.Personnel))
         {
-            return ServiceResponse.FromError(new(HttpStatusCode.Forbidden, "Only admins can delete products!",
+            return ServiceResponse.FromError(new(HttpStatusCode.Forbidden, "Only admins/personnel can delete products!",
                 ErrorCodes.CannotAdd));
         }
 

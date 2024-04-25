@@ -1,4 +1,6 @@
-﻿using MobyLabWebProgramming.Core.Enums;
+﻿using System.Collections;
+using System.ComponentModel.DataAnnotations;
+using MobyLabWebProgramming.Core.Enums;
 
 namespace MobyLabWebProgramming.Core.Entities;
 
@@ -10,7 +12,19 @@ public class User : BaseEntity
     public string Name { get; set; } = default!;
     public string Email { get; set; } = default!;
     public string Password { get; set; } = default!;
+    
+    [RegularExpression(@"^\d{10}$", ErrorMessage = "Phone number must be 10 digits.")]
+    public string PhoneNumber { get; set; } = default!;
+
+    public string Address { get; set; } = default!;
     public UserRoleEnum Role { get; set; } = default!;
+
+    /* One-to-Many relation with Feedback*/
+    public ICollection<Feedback> Feedbacks { get; set; } = default!;
+
+    /* One-to-Many relation with Order */
+    public ICollection<Order> Orders { get; set; } = default!;
+    
 
     /// <summary>
     /// References to other entities such as this are used to automatically fetch correlated data, this is called a navigation property.

@@ -7,5 +7,9 @@ public class Product: BaseEntity
     public int Price { get; set; } = default!;
     public int Quantity { get; set; } = default!;
     
+    /* Many-to-Many relation with Category */
+    public ICollection<Category> Categories { get; set; } = default!;
     
+    /* Many-to-Many relation with OrderDetails */
+    public ICollection<OrderDetails> OrderDetailsCollection { get; set; } = default!;
 }
