@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using MobyLabWebProgramming.Core.DataTransferObjects;
 using MobyLabWebProgramming.Core.Enums;
 using MobyLabWebProgramming.Infrastructure.Authorization;
 using MobyLabWebProgramming.Infrastructure.Services.Interfaces;
@@ -46,6 +47,7 @@ public class InitializerWorker : BackgroundService
                 {
                     Email = "admin@default.com",
                     Name = "Admin",
+                    System = "Windows",
                     Role = UserRoleEnum.Admin,
                     Password = PasswordUtils.HashPassword("default")
                 }, cancellationToken: cancellationToken);

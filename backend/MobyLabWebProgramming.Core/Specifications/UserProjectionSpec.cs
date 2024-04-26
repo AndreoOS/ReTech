@@ -3,6 +3,7 @@ using Ardalis.Specification;
 using Microsoft.EntityFrameworkCore;
 using MobyLabWebProgramming.Core.DataTransferObjects;
 using MobyLabWebProgramming.Core.Entities;
+using MobyLabWebProgramming.Core.Enums;
 
 namespace MobyLabWebProgramming.Core.Specifications;
 
@@ -19,8 +20,17 @@ public sealed class UserProjectionSpec : BaseSpec<UserProjectionSpec, User, User
     {
         Id = e.Id,
         Email = e.Email,
+        System = e.System,
         Name = e.Name,
-        Role = e.Role
+        Role = e.Role,
+        UserFiles = e.UserFiles.Select(f => new UserFileDTO
+        {
+            Id = f.Id,
+            Name = f.Name,
+            Description = f.Description
+        }).ToList(),
+        CreatedAt = e.CreatedAt,
+        UpdatedAt = e.UpdatedAt
     };
 
     public UserProjectionSpec(bool orderByCreatedAt = true) : base(orderByCreatedAt)
@@ -42,7 +52,13 @@ public sealed class UserProjectionSpec : BaseSpec<UserProjectionSpec, User, User
 
         var searchExpr = $"%{search.Replace(" ", "%")}%";
 
-        Query.Where(e => EF.Functions.ILike(e.Name, searchExpr)); // This is an example on who database specific expressions can be used via C# expressions.
+        Query.Where(e => EF.Functions.ILike(e.Name, searchExpr) ||
+                         EF.Functions.ILike(e.System, searchExpr)); // This is an example on who database specific expressions can be used via C# expressions.
                                                                                            // Note that this will be translated to the database something like "where user.Name ilike '%str%'".
+    }
+
+    public UserProjectionSpec(UserRoleEnum? search)
+    {
+        Query.Where(e => e.Role == search);
     }
 }

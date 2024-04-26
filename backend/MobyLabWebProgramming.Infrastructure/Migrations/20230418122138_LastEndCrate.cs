@@ -4,7 +4,7 @@
 
 namespace MobyLabWebProgramming.Infrastructure.Migrations
 {
-    public partial class ProductEntityCreation : Migration
+    public partial class LastEndCrate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

@@ -170,11 +170,17 @@ public static class WebApplicationBuilderExtensions
         builder.Services.Configure<MailConfiguration>(builder.Configuration.GetSection(nameof(MailConfiguration)));
         builder.Services
             .AddTransient<IUserService, UserService>()
+            .AddTransient<ICustomerService, CustomerService>()
+            .AddTransient<IOrderService, OrderService>()
+            .AddTransient<IProductService, ProductService>()
+            .AddTransient<ICategoryService, CategoryService>()
+            .AddTransient<IBrandService, BrandService>()
+            .AddTransient<ICartService, CartService>()
+            .AddTransient<IProductBrandService, ProductBrandService>()
             .AddTransient<ILoginService, LoginService>()
             .AddTransient<IFileRepository, FileRepository>()
             .AddTransient<IUserFileService, UserFileService>()
-            .AddTransient<IMailService, MailService>()
-            .AddTransient<IProductService, ProductService>();
+            .AddTransient<IMailService, MailService>();
 
         return builder;
     }

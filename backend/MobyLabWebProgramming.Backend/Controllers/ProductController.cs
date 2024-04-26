@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MobyLabWebProgramming.Core.DataTransferObjects;
 using MobyLabWebProgramming.Core.Requests;
@@ -11,9 +11,10 @@ namespace MobyLabWebProgramming.Backend.Controllers;
 
 [ApiController]
 [Route("api/[controller]/[action]")]
-public class ProductController: AuthorizedController
+public class ProductController : AuthorizedController
 {
     private readonly IProductService _productService;
+
     public ProductController(IUserService userService, IProductService productService) : base(userService)
     {
         _productService = productService;
@@ -21,46 +22,46 @@ public class ProductController: AuthorizedController
 
     [Authorize]
     [HttpGet("{id:guid}")]
-    public async Task<ActionResult<RequestResponse<ProductDto>>> GetById([FromRoute] Guid id)
+    public async Task<ActionResult<RequestResponse<ProductDTO>>> GetById([FromRoute] Guid id)
     {
         var currentUser = await GetCurrentUser();
-        
+
         return currentUser.Result != null ?
-            this.FromServiceResponse(await _productService.GetProductById(id)) :
-            this.ErrorMessageResult<ProductDto>(currentUser.Error);
+            this.FromServiceResponse(await _productService.GetProduct(id)) :
+            this.ErrorMessageResult<ProductDTO>(currentUser.Error);
     }
 
     [Authorize]
     [HttpGet]
-    public async Task<ActionResult<RequestResponse<PagedResponse<ProductDto>>>> GetPage([FromQuery] PaginationSearchQueryParams pagination)
+    public async Task<ActionResult<RequestResponse<PagedResponse<ProductDTO>>>> GetPage([FromQuery] PaginationSearchQueryParams pagination)
     {
         var currentUser = await GetCurrentUser();
 
-        return currentUser.Result != null
-            ? this.FromServiceResponse(await _productService.GetProducts(pagination))
-            : this.ErrorMessageResult<PagedResponse<ProductDto>>(currentUser.Error);
-    }
-
-    [Authorize]
-    [HttpPut]
-    public async Task<ActionResult<RequestResponse>> Update([FromBody] ProductUpdateDto product)
-    {
-        var currentUser = await GetCurrentUser();
-
-        return currentUser.Result != null
-            ? this.FromServiceResponse(await _productService.UpdateProduct(product, currentUser.Result))
-            : this.ErrorMessageResult(currentUser.Error);
+        return currentUser.Result != null ?
+            this.FromServiceResponse(await _productService.GetProducts(pagination)) :
+            this.ErrorMessageResult<PagedResponse<ProductDTO>>(currentUser.Error);
     }
 
     [Authorize]
     [HttpPost]
-    public async Task<ActionResult<RequestResponse>> Add([FromBody] ProductAddDto product)
+    public async Task<ActionResult<RequestResponse>> Add([FromBody] ProductAddDTO product)
     {
         var currentUser = await GetCurrentUser();
 
-        return currentUser.Result != null
-            ? this.FromServiceResponse(await _productService.AddProduct(product, currentUser.Result))
-            : this.ErrorMessageResult(currentUser.Error);
+        return currentUser.Result != null ?
+            this.FromServiceResponse(await _productService.AddProduct(product, currentUser.Result)) :
+            this.ErrorMessageResult(currentUser.Error);
+    }
+
+    [Authorize]
+    [HttpPut]
+    public async Task<ActionResult<RequestResponse>> Update([FromBody] ProductUpdateDTO product)
+    {
+        var currentUser = await GetCurrentUser();
+
+        return currentUser.Result != null ?
+            this.FromServiceResponse(await _productService.UpdateProduct(product, currentUser.Result)) :
+            this.ErrorMessageResult(currentUser.Error);
     }
 
     [Authorize]
@@ -69,9 +70,8 @@ public class ProductController: AuthorizedController
     {
         var currentUser = await GetCurrentUser();
 
-        return currentUser.Result != null
-            ? this.FromServiceResponse(await _productService.DeleteProduct(id, currentUser.Result))
-            : this.ErrorMessageResult(currentUser.Error);
+        return currentUser.Result != null ?
+            this.FromServiceResponse(await _productService.DeleteProduct(id)) :
+            this.ErrorMessageResult(currentUser.Error);
     }
-    
 }

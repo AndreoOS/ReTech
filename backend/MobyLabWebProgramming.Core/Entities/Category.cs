@@ -1,3 +1,5 @@
+﻿using MobyLabWebProgramming.Core.Enums;
+
 namespace MobyLabWebProgramming.Core.Entities;
 
 public class Category : BaseEntity
@@ -6,7 +8,6 @@ public class Category : BaseEntity
 
     public string Description { get; set; } = default!;
 
-    /* Many-to-many relation with Product */
+    /* One-To-Many relation with Product */
     public ICollection<Product> Products { get; set; } = default!;
-    
 }

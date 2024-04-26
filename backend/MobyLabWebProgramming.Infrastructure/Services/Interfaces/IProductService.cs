@@ -1,5 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
-using MobyLabWebProgramming.Core.DataTransferObjects;
+﻿using MobyLabWebProgramming.Core.DataTransferObjects;
 using MobyLabWebProgramming.Core.Requests;
 using MobyLabWebProgramming.Core.Responses;
 
@@ -7,19 +6,15 @@ namespace MobyLabWebProgramming.Infrastructure.Services.Interfaces;
 
 public interface IProductService
 {
-    public Task<ServiceResponse<PagedResponse<ProductDto>>> GetProducts(PaginationSearchQueryParams pagination,
-        CancellationToken cancellationToken = default);
+    public Task<ServiceResponse<ProductDTO>> GetProduct(Guid id, CancellationToken cancellationToken = default);
 
-    public Task<ServiceResponse<ProductDto>> GetProductById(Guid id,
-        CancellationToken cancellationToken = default);
+    public Task<ServiceResponse<PagedResponse<ProductDTO>>> GetProducts(PaginationSearchQueryParams pagination, CancellationToken cancellationToken = default);
 
-    public Task<ServiceResponse> AddProduct([FromBody] ProductAddDto product, UserDTO? requestingUser = default,
-        CancellationToken cancellationToken = default);
+    public Task<ServiceResponse<int>> GetProductCount(CancellationToken cancellationToken = default);
 
-    public Task<ServiceResponse> UpdateProduct([FromBody] ProductUpdateDto product, UserDTO? requestingUser = default,
-        CancellationToken cancellationToken = default);
+    public Task<ServiceResponse> AddProduct(ProductAddDTO product, UserDTO? requestingUser = default, CancellationToken cancellationToken = default);
 
-    public Task<ServiceResponse> DeleteProduct([FromRoute] Guid id, UserDTO? requestingUser = default,
-        CancellationToken cancellationToken = default);
+    public Task<ServiceResponse> UpdateProduct(ProductUpdateDTO product, UserDTO? requestingUser = default, CancellationToken cancellationToken = default);
 
+    public Task<ServiceResponse> DeleteProduct(Guid id, UserDTO? requestingUser = default, CancellationToken cancellationToken = default);
 }

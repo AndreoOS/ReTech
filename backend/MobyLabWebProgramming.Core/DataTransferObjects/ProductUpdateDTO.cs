@@ -1,3 +1,3 @@
-namespace MobyLabWebProgramming.Core.DataTransferObjects;
+﻿namespace MobyLabWebProgramming.Core.DataTransferObjects;
 
-public record ProductUpdateDto(Guid Id, string? Name = default, string? Description = default, int? Price = default, int? Quantity = default );
+public record ProductUpdateDTO(Guid Id, string? Name = default, string? Description = default, decimal? Price = default, int? Quantity = default, string? Color = default, string? Size = default);

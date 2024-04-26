@@ -22,6 +22,7 @@ public interface IUserService
     /// Login as suggested responds to a user login request with the JWT token and user information.
     /// </summary>
     public Task<ServiceResponse<LoginResponseDTO>> Login(LoginDTO login, CancellationToken cancellationToken = default);
+    public Task<ServiceResponse> Register(RegisterDTO register, CancellationToken cancellationToken = default);
     /// <summary>
     /// GetUserCount returns the number of users in the database.
     /// </summary>

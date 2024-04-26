@@ -1,4 +1,5 @@
-﻿using MobyLabWebProgramming.Core.Enums;
+﻿using MobyLabWebProgramming.Core.Entities;
+using MobyLabWebProgramming.Core.Enums;
 
 namespace MobyLabWebProgramming.Core.DataTransferObjects;
 
@@ -11,5 +12,9 @@ public class UserDTO
     public Guid Id { get; set; }
     public string Name { get; set; } = default!;
     public string Email { get; set; } = default!;
+    public string System { get; set; } = default!;
     public UserRoleEnum Role { get; set; } = default!;
+    public ICollection<UserFileDTO> UserFiles { get; set; } = default!;
+    public DateTime CreatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
 }

@@ -29,4 +29,10 @@ public class AuthorizationController : ControllerBase // The controller must inh
     {
         return this.FromServiceResponse(await _userService.Login(login with { Password = PasswordUtils.HashPassword(login.Password)})); // The "with" keyword works only with records and it creates another object instance with the updated properties. 
     }
+
+    [HttpPost]
+    public async Task<ActionResult<RequestResponse>> Register([FromBody] RegisterDTO register)
+    {
+        return this.FromServiceResponse(await _userService.Register(register with {Name = register.Name, Email = register.Email, Password = PasswordUtils.HashPassword(register.Password)}));
+    }
 }

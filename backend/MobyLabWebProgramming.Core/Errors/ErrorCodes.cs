@@ -13,10 +13,16 @@ public enum ErrorCodes
     EntityNotFound,
     PhysicalFileNotFound,
     UserAlreadyExists,
+    CustomerAlreadyExists,
+    OrderAlreadyExists,
+    ProductAlreadyExists,
+    CategoryAlreadyExists,
+    BrandAlreadyExists,
+    CartAlreadyExists,
+    ProductBrandAlreadyExists,
     WrongPassword,
     CannotAdd,
     CannotUpdate,
     CannotDelete,
-    MailSendFailed,
-    ProductAlreadyExists,
+    MailSendFailed
 }

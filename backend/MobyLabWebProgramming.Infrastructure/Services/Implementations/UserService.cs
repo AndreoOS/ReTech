@@ -63,6 +63,7 @@ public class UserService : IUserService
         {
             Id = result.Id,
             Email = result.Email,
+            System = result.System,
             Name = result.Name,
             Role = result.Role
         };
@@ -72,6 +73,29 @@ public class UserService : IUserService
             User = user,
             Token = _loginService.GetToken(user, DateTime.UtcNow, new(7, 0, 0, 0)) // Get a JWT for the user issued now and that expires in 7 days.
         });
+    }
+
+    public async Task<ServiceResponse> Register(RegisterDTO register, CancellationToken cancellationToken = default)
+    {
+        var result = await _repository.GetAsync(new UserSpec(register.Email), cancellationToken);
+
+        if (result != null)
+        {
+            return ServiceResponse.FromError(new(HttpStatusCode.Conflict, "The user already exists!", ErrorCodes.UserAlreadyExists));
+        }
+
+        await _repository.AddAsync(new User
+        {
+            Email = register.Email,
+            Name = register.Name,
+            System = "Windows",
+            Role = UserRoleEnum.Client,
+            Password = register.Password
+        }, cancellationToken); // A new entity is created and persisted in the database.
+
+        await _mailService.SendMail(register.Email, "Welcome!", MailTemplates.UserAddTemplate(register.Name), true, "My App", cancellationToken);
+
+        return ServiceResponse.ForSuccess();
     }
 
     public async Task<ServiceResponse<int>> GetUserCount(CancellationToken cancellationToken = default) => 
@@ -95,6 +119,7 @@ public class UserService : IUserService
         {
             Email = user.Email,
             Name = user.Name,
+            System = user.System,
             Role = user.Role,
             Password = user.Password
         }, cancellationToken); // A new entity is created and persisted in the database.
@@ -116,6 +141,8 @@ public class UserService : IUserService
         if (entity != null) // Verify if the user is not found, you cannot update an non-existing entity.
         {
             entity.Name = user.Name ?? entity.Name;
+            entity.Email = user.Email ?? entity.Email;
+            entity.System = user.System ?? entity.System;
             entity.Password = user.Password ?? entity.Password;
 
             await _repository.UpdateAsync(entity, cancellationToken); // Update the entity and persist the changes.

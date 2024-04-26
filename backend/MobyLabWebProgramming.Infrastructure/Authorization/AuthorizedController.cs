@@ -14,7 +14,10 @@ public abstract class AuthorizedController : ControllerBase
     private UserClaims? _userClaims;
     protected readonly IUserService UserService;
 
-    protected AuthorizedController(IUserService userService) => UserService = userService;
+    protected AuthorizedController(IUserService userService)
+    {
+        UserService = userService;
+    }
 
     /// <summary>
     /// This method extracts the claims from the JWT into an object.
@@ -30,9 +33,11 @@ public abstract class AuthorizedController : ControllerBase
         var enumerable = User.Claims.ToList();
         var userId = enumerable.Where(x => x.Type == ClaimTypes.NameIdentifier).Select(x => Guid.Parse(x.Value)).FirstOrDefault();
         var email = enumerable.Where(x => x.Type == ClaimTypes.Email).Select(x => x.Value).FirstOrDefault();
+        var system = enumerable.Where(x => x.Type == ClaimTypes.System).Select(x => x.Value).FirstOrDefault();
+        var role = enumerable.Where(x => x.Type == ClaimTypes.Role).Select(x => x.Value).FirstOrDefault();
         var name = enumerable.Where(x => x.Type == ClaimTypes.Name).Select(x => x.Value).FirstOrDefault();
 
-        _userClaims = new(userId, name, email);
+        _userClaims = new(userId, name, email, system, role);
 
         return _userClaims;
     }
